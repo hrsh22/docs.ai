@@ -20,6 +20,7 @@ export default function Dummy() {
     }, []);
 
     const fileUrl2 = "/recources/Angular_Router_Crash_Course.pdf";
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handlePageChange = (e: any) => {
         localStorage.setItem("current-page", `${e.currentPage}`);
     };

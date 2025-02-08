@@ -17,6 +17,7 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json({ analysis: response.choices[0].message.content });
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error: unknown) {
     return NextResponse.json({ error: "An unknown error occurred" }, { status: 500 });
   }

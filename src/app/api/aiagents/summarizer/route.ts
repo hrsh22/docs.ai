@@ -4,6 +4,7 @@ import pdf from "pdf-parse";
 import fs from "fs/promises";
 import path from "path";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function GET(req: Request) {
   console.log("GET request received");
   try {
@@ -47,6 +48,7 @@ export async function POST(req: Request) {
     try {
       await fs.access(fullPath);
       console.log('File exists at path:', fullPath);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       console.error('File not found:', fullPath);
       return NextResponse.json(
