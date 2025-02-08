@@ -9,19 +9,11 @@ const PDFListItem: React.FC<IPDFList> = ({ title, name, tags, path, url, descrip
   const router = useRouter();
 
   const view = () => {
-    router.push("/show");
+    router.push("/view");
   }
+
   return (
     <>
-      {/* <div onClick={() => setShowModal(!showModal)} className='box' title="Click to details">
-        <img src="/pdf.png" alt="pdf" className="w-12 mx-auto block mb-3" />
-        <div className="f">
-          <h6 className='text-xl mb-1'> {title} </h6>
-          <p className="text-sm">{name}</p>
-        </div>
-      </div> */}
-      {/* {showModal ? <Modal modalShow={showModal} modalClose={() => setShowModal(false)} url={url} /> : null} */}
-     
         <div className="flex flex-col border-2 border-black overflow-hidden p-8 rounded-xl shadow-large bg-yellow-200 w-80 justify-center items-center">
           <div className="px-0 py-2">
             <div className="items-center w-full justify-center grid grid-cols-1 text-left">

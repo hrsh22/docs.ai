@@ -22,8 +22,8 @@ export default function Home() {
 
   return (
 
-    <div className="">
-      <div className="flex flex-col justify-center items-center">
+    <div className="bg-white">
+      <div className="flex flex-col justify-center items-center bg-white">
         <h1 className="">PDF Reader with Searching and Navigating</h1>
         <PDFList lists={data} />
       </div>
