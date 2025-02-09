@@ -8,6 +8,7 @@ import { pageNavigationPlugin } from "@react-pdf-viewer/page-navigation";
 import { searchPlugin } from "@react-pdf-viewer/search";
 import { useAccount } from "wagmi";
 import Image from "next/image";
+import { ethers, BrowserProvider, parseEther } from "ethers";
 
 export default function Dummy() {
     const [initialPage, setInitialPage] = useState(0);
@@ -15,7 +16,8 @@ export default function Dummy() {
     const [isLoading, setIsLoading] = useState(false);
     const [agentId, setAgentId] = useState(0);
     const [accAdd, setAccountAdd] = useState();
-    const [amt, setAmt] = useState();
+    const [amt, setAmt] = useState("");
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const currentPage = localStorage.getItem("current-page");
@@ -155,7 +157,7 @@ export default function Dummy() {
 
                 setSummary(finalJson.displayMessage || 'No summary returned');
                 setAccountAdd(finalJson.accountAddress)
-                setAccountAdd(finalJson.finalAmount)
+                setAmt(finalJson.finalAmount)
             }
         } catch (error) {
             console.error('Error in getSummary:', error);
@@ -164,6 +166,47 @@ export default function Dummy() {
             setIsLoading(false);
         }
     };
+
+    const payInvoice = async () => {
+        try {
+            // Check if MetaMask (or another Ethereum provider) is installed
+            if (!window.ethereum) {
+                throw new Error('Please install MetaMask or another Ethereum wallet.');
+            }
+
+            // Initialize the provider (MetaMask, WalletConnect, etc.)
+            const provider = new BrowserProvider(window.ethereum);
+
+            // Request account access
+            await provider.send('eth_requestAccounts', []);
+
+            // Get the signer (connected wallet)
+            const signer = await provider.getSigner();
+
+            // Define the transaction details
+            const transaction = {
+                to: accAdd,
+                value: parseEther(amt), // 0.01 ETH
+            };
+
+            // Send the transaction
+            const txResponse = await signer.sendTransaction(transaction);
+
+            // Wait for the transaction to be mined
+            await txResponse.wait();
+
+            // // Set the transaction hash
+            // setTransactionHash(txResponse.hash);
+
+            alert('Transaction successful!');
+        } catch (error) {
+            console.error('Transaction failed:', error);
+            alert('Transaction failed. Please check the console for more details.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
 
     const searchPluginInstance = searchPlugin();
     const pageNavigationPluginInstance = pageNavigationPlugin();
@@ -224,11 +267,11 @@ export default function Dummy() {
                                         <div
                                             className="absolute inset-0 duration-1000 opacity-60 transitiona-all bg-gradient-to-r from-indigo-500 via-pink-500 to-yellow-400 rounded-xl blur-lg filter group-hover:opacity-100 group-hover:duration-200"
                                         ></div>
-                                        <a
+                                        <button
                                             role="button"
                                             className="group relative inline-flex items-center justify-center text-base rounded-xl bg-gray-900 px-8 py-3 font-semibold text-white transition-all duration-200 hover:bg-gray-800 hover:shadow-lg hover:-translate-y-0.5 hover:shadow-gray-600/30"
                                             title="payment"
-                                            href="#"
+                                            onClick={payInvoice}
                                         >Pay Invoice<svg
                                             aria-hidden="true"
                                             viewBox="0 0 10 10"
@@ -246,7 +289,7 @@ export default function Dummy() {
                                                     className="transition group-hover:translate-x-[3px]"
                                                 ></path>
                                             </svg>
-                                        </a>
+                                        </button>
                                     </div>
 
                                 </>
