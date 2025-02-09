@@ -6,6 +6,7 @@ import "@react-pdf-viewer/core/lib/styles/index.css";
 import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 import { pageNavigationPlugin } from "@react-pdf-viewer/page-navigation";
 import { searchPlugin } from "@react-pdf-viewer/search";
+import { useAccount } from "wagmi";
 
 export default function Dummy() {
     const [initialPage, setInitialPage] = useState(0);
@@ -87,6 +88,10 @@ export default function Dummy() {
 
     const searchPluginInstance = searchPlugin();
     const pageNavigationPluginInstance = pageNavigationPlugin();
+
+    const { address, isConnected } = useAccount();
+    console.log("ADDRESS", address);
+    console.log("IS CONNECTED", isConnected);
 
     return (
         <div className="flex flex-row bg-white">

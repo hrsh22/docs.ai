@@ -1,46 +1,45 @@
 "use client"
-import Image from "next/image";
+import {
+  ConnectWallet,
+  Wallet,
+  WalletDropdown,
+  WalletDropdownDisconnect,
+} from '@coinbase/onchainkit/wallet';
+import {
+  Address,
+  Avatar,
+  Name,
+  Identity,
+} from '@coinbase/onchainkit/identity';
+import { color } from '@coinbase/onchainkit/theme';
 import Link from 'next/link'
 
 const Header = () => {
-
   return (
-    <div className="absolute top-0 w-full bg-black h-20 flex items-center z-10 bg-hero">
-      <div className="absolute left-4">
-        <Link href="/">
-          <Image
-            src="/assets/artOne.svg"
-            alt="Love"
-            width={800}
-            height={200}
-            className="mt-20"
-          />
+    <nav className="sticky top-0 w-full bg-white border-b border-gray-200 px-6 py-4 z-50 shadow-sm">
+      <div className="flex justify-between items-center max-w-7xl mx-auto">
+        <Link href="/" className="text-2xl font-bold text-gray-800">
+          docs.ai
         </Link>
+        {/* <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors">
+          Connect Wallet
+        </button> */}
+        <Wallet>
+          <ConnectWallet>
+            <Avatar className="h-6 w-6" />
+            <Name />
+          </ConnectWallet>
+          <WalletDropdown>
+            <Identity className="px-4 pt-3 pb-2" hasCopyAddressOnClick>
+              <Avatar />
+              <Name />
+              <Address className={color.foregroundMuted} />
+            </Identity>
+            <WalletDropdownDisconnect />
+          </WalletDropdown>
+        </Wallet>
       </div>
-      <div className="absolute right-6">
-        <div className="flex flex-row gap-8 items-center">
-          <Image
-            className="cursor-pointer hidden lg:block"
-            src="/assets/logo/logo.svg"
-            width={250}
-            height={250}
-            alt="FIL-B Logo"
-          />
-          {/* <div className="text-black items-center inline-flex bg-white border-2 border-black duration-200 ease-in-out focus:outline-none hover:bg-black hover:shadow-none hover:text-white justify-center rounded-[20px] shadow-[5px_5px_black] text-center transform transition w-full lg:px-2 lg:py-2 lg:text-xl px-2 py-2">
-
-            <button type="button">
-              <Image
-                className="cursor-pointer "
-                src="/assets/icons/fvm.png"
-                width={30}
-                height={30}
-                alt="FVM Logo"
-              />
-            </button>
-          </div> */}
-        </div>
-      </div>
-    </div >
+    </nav>
   );
 };
 

@@ -19,14 +19,10 @@ export default function Home() {
   }, [])
 
   return (
-
-    <div className="bg-white">
-      <div className="flex flex-col justify-center items-center bg-white">
-        <h1 className="">PDF Reader with Searching and Navigating</h1>
+    <div className="bg-white min-h-screen">
+      <div className="flex flex-col justify-center items-center bg-white pt-8">
         <PDFList lists={data} />
       </div>
     </div>
-
-
   );
 }
