@@ -3,11 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "preinstall": "export npm_config_build_from_source=false",
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "now-build": "yum install libuuid-devel libmount-devel && cp /lib64/{libuuid,libmount,libblkid}.so.1 node_modules/canvas/build/Release/ && npm run build"
+    "now-build": "apk add --no-cache build-base cairo-dev pango-dev jpeg-dev giflib-dev && npm run build"
   },
   "dependencies": {
     "@coinbase/onchainkit": "^0.36.10",
