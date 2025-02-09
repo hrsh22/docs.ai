@@ -7,8 +7,7 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "now-build": "apt-get update && apt-get install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev && npm run build"
+    "lint": "next lint"
   },
   "dependencies": {
     "@coinbase/onchainkit": "^0.36.10",
