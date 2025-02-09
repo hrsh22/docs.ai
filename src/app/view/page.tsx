@@ -20,7 +20,7 @@ export default function Dummy() {
         }
     }, []);
 
-    const fileUrl2 = "/recources/Angular_Router_Crash_Course.pdf";
+    const fileUrl2 = "/recources/Bill.pdf";
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handlePageChange = (e: any) => {
         localStorage.setItem("current-page", `${e.currentPage}`);
@@ -40,6 +40,66 @@ export default function Dummy() {
             console.log('Request URL:', '/api/aiagents/summarizer');
 
             const response = await fetch('/api/aiagents/summarizer', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    pdfPath: pdfPath
+                })
+            });
+
+            console.log('Response status:', response.status);
+            console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+
+            if (response.status === 404) {
+                throw new Error('PDF file not found. Please check if the file exists in the correct location.');
+            }
+
+            const responseText = await response.text();
+            console.log('Raw response:', responseText);
+
+            if (!response.ok) {
+                throw new Error(`Server responded with ${response.status}: ${responseText}`);
+            }
+
+            let data;
+            try {
+                data = JSON.parse(responseText);
+            } catch (e) {
+                console.error('Failed to parse JSON:', e);
+                throw new Error('Invalid JSON response from server');
+            }
+
+            if (data.error) {
+                console.error('API Error:', data.error);
+                setSummary(`Error: ${data.error}`);
+            } else {
+                console.log('Summary received:', data.summary);
+                setSummary(data.summary || 'No summary returned');
+            }
+        } catch (error) {
+            console.error('Error in getSummary:', error);
+            setSummary(error instanceof Error ? error.message : 'An unknown error occurred');
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const getBill = async () => {
+        try {
+            setIsLoading(true);
+            const pdfPath = fileUrl2.substring(1);
+            console.log('Original PDF path:', pdfPath);
+
+            // Create a URLSearchParams object for the request
+            const params = new URLSearchParams();
+            params.append('pdfPath', pdfPath);
+
+            console.log('Attempting to trace Bill:', pdfPath);
+            console.log('Request URL:', '/api/aiagents/caAgent');
+
+            const response = await fetch('/api/aiagents/caAgent', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -111,8 +171,11 @@ export default function Dummy() {
                                 >
                                     {isLoading ? "Summarizing..." : "Summarize"}
                                 </button>
-                                <button className="text-blue-400 hover:text-blue-300 transition duration-200">
-                                    A2
+                                <button 
+                                onClick={getBill}
+                                disabled={isLoading}
+                                className="text-blue-400 hover:text-blue-300 transition duration-200">
+                                    {isLoading ? "Generating..." : "Bill Agent"}
                                 </button>
                                 <button className="text-blue-400 hover:text-blue-300 transition duration-200">
                                     A3

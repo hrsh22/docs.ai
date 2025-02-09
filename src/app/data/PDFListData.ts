@@ -2,10 +2,10 @@ import IPDFList from '../models/PDFList.model'
 
 export const Data: IPDFList[] = [
   {
-    name: "Angular Router Crash Course",
-    title: "Angular Router",
-    description: "Description 1",
-    url: "Angular_Router_Crash_Course.pdf",
+    title: "Service Agreement",
+    name: "Service Agreement and Invoice",
+    description: "",
+    url: "Bill.pdf",
     path: "path"
   },
   {
