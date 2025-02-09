@@ -13,6 +13,9 @@ export default function Dummy() {
     const [initialPage, setInitialPage] = useState(0);
     const [summary, setSummary] = useState<string>("");
     const [isLoading, setIsLoading] = useState(false);
+    const [agentId, setAgentId] = useState(0);
+    const [accAdd, setAccountAdd] = useState();
+    const [amt, setAmt] = useState();
 
     useEffect(() => {
         const currentPage = localStorage.getItem("current-page");
@@ -29,7 +32,9 @@ export default function Dummy() {
 
     const getSummary = async () => {
         try {
+
             setIsLoading(true);
+            setAgentId(1);
             const pdfPath = fileUrl2.substring(1);
             console.log('Original PDF path:', pdfPath);
 
@@ -90,6 +95,7 @@ export default function Dummy() {
     const getBill = async () => {
         try {
             setIsLoading(true);
+            setAgentId(2);
             const pdfPath = fileUrl2.substring(1);
             console.log('Original PDF path:', pdfPath);
 
@@ -125,8 +131,11 @@ export default function Dummy() {
             }
 
             let data;
+            let ca;
             try {
                 data = JSON.parse(responseText);
+
+
             } catch (e) {
                 console.error('Failed to parse JSON:', e);
                 throw new Error('Invalid JSON response from server');
@@ -137,7 +146,16 @@ export default function Dummy() {
                 setSummary(`Error: ${data.error}`);
             } else {
                 console.log('Summary received:', data.summary);
-                setSummary(data.summary || 'No summary returned');
+                const firstParse = data.summary;
+
+                // Step 2: Parse the inner JSON
+                const finalJson = JSON.parse(firstParse);
+
+                console.log(finalJson);
+
+                setSummary(finalJson.displayMessage || 'No summary returned');
+                setAccountAdd(finalJson.accountAddress)
+                setAccountAdd(finalJson.finalAmount)
             }
         } catch (error) {
             console.error('Error in getSummary:', error);
@@ -192,11 +210,45 @@ export default function Dummy() {
                             </div>
                         </div>
 
-                        <div className="flex flex-col justify-start items-start bg-gray-800 text-white rounded-lg shadow-lg p-6 w-80 h-[460px] overflow-y-auto">
+                        <div className="flex flex-col justify-start items-center bg-gray-800 text-white rounded-lg shadow-lg p-6 w-80 h-[460px] overflow-y-auto">
                             {summary && (
                                 <>
-                                    <h3 className="text-lg font-semibold mb-2">Document Summary</h3>
-                                    <p className="text-sm">{summary}</p>
+                                    {agentId == 1 ? <>
+                                        <h3 className="text-lg font-semibold mb-2 text-center"> AI AGENT RESPONSE</h3>
+                                        <p className="text-sm">{summary}</p>
+                                    </> : <>
+                                        <h3 className="text-lg font-semibold mb-2 text-center"> AI AGENT RESPONSE</h3>
+                                        <p className="text-sm">{summary}</p></>}
+
+                                    <div className="absolute bottom-12 inline-flex items-center justify-center gap-4 group">
+                                        <div
+                                            className="absolute inset-0 duration-1000 opacity-60 transitiona-all bg-gradient-to-r from-indigo-500 via-pink-500 to-yellow-400 rounded-xl blur-lg filter group-hover:opacity-100 group-hover:duration-200"
+                                        ></div>
+                                        <a
+                                            role="button"
+                                            className="group relative inline-flex items-center justify-center text-base rounded-xl bg-gray-900 px-8 py-3 font-semibold text-white transition-all duration-200 hover:bg-gray-800 hover:shadow-lg hover:-translate-y-0.5 hover:shadow-gray-600/30"
+                                            title="payment"
+                                            href="#"
+                                        >Pay Invoice<svg
+                                            aria-hidden="true"
+                                            viewBox="0 0 10 10"
+                                            height="10"
+                                            width="10"
+                                            fill="none"
+                                            className="mt-0.5 ml-2 -mr-1 stroke-white stroke-2"
+                                        >
+                                                <path
+                                                    d="M0 5h7"
+                                                    className="transition opacity-0 group-hover:opacity-100"
+                                                ></path>
+                                                <path
+                                                    d="M1 1l4 4-4 4"
+                                                    className="transition group-hover:translate-x-[3px]"
+                                                ></path>
+                                            </svg>
+                                        </a>
+                                    </div>
+
                                 </>
                             )}
                         </div>

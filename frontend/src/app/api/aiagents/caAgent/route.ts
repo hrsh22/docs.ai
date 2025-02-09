@@ -83,13 +83,12 @@ export async function POST(req: Request) {
                       - If due date is today, payment is NOT overdue
 
                     2. Required Information:
-                      - Account Number (if present)
                       - Account Address (the address where service is provided or account location)
                       - Payee Name (who the payment should be made to)
-                      - Original Payment Amount
+                      - Original Payment Amount in ETH
                       - Due Date
-                      - Late Fee Details (if any):
-                        * Fixed amount
+                      - Late Fee Details ONLY if due date has passed:
+                        * Fixed amount in ETH
                         * Percentage
                         * Grace period in days
 
@@ -99,9 +98,10 @@ export async function POST(req: Request) {
                       - "OVERDUE": if due date has passed
                       - "WITHIN_GRACE_PERIOD": if overdue but within grace period
 
+                    4. Display message would be a summary of invoice details for example frame the message as if telling the reader that this invoice needs to be made.
+
                     Return the information in this exact JSON format:
                     {
-                      "accountNumber": string (optional),
                       "accountAddress": string,
                       "payeeName": string,
                       "originalAmount": number,
@@ -109,12 +109,12 @@ export async function POST(req: Request) {
                       "lateFeeClause": {
                         "exists": boolean,
                         "feeAmount": number (optional),
-                        "feePercentage": number (optional),
                         "gracePeriod": number (optional)
                       },
                       "finalAmount": number,
                       "isPaymentOverdue": boolean,
-                      "paymentStatus": string
+                      "paymentStatus": string,
+                      "displayMessage: string"
                     }`,
         },
         {
@@ -129,7 +129,7 @@ export async function POST(req: Request) {
     console.log(response);
     console.log("OpenAI API response received");
 
-    return NextResponse.json({ summary: response.choices[0].message.content });
+    return NextResponse.json({ summary: response.choices[0].message.content});
   } catch (error: unknown) {
     console.error("Error processing PDF:", error);
     const errorMessage =
