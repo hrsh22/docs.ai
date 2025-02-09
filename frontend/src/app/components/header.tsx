@@ -16,9 +16,9 @@ import Link from 'next/link'
 
 const Header = () => {
   return (
-    <nav className="sticky top-0 w-full bg-white border-b border-gray-200 px-6 py-4 z-50 shadow-sm">
+    <nav className="top-0 w-full px-6 py-4 z-50">
       <div className="flex justify-between items-center max-w-7xl mx-auto">
-        <Link href="/" className="text-2xl font-bold text-gray-800">
+        <Link href="/" className="text-2xl font-bold text-white">
           docs.ai
         </Link>
         {/* <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors">
