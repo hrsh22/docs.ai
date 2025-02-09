@@ -8,7 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "now-build": "apk add --no-cache build-base cairo-dev pango-dev jpeg-dev giflib-dev && npm run build"
+    "now-build": "apt-get update && apt-get install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev && npm run build"
   },
   "dependencies": {
     "@coinbase/onchainkit": "^0.36.10",
