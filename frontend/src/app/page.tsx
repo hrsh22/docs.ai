@@ -58,7 +58,6 @@ const App: React.FC = () => {
   return (
     <div className="bg-white">
       <div className="flex flex-col">
-        {/* <Navbar /> */}
         <Hero {...data.hero} />
         <div id="faq" className="pt-20 mb-20 px-72 text-3xl text-center text-gray-500">
           Docs.AI revolutionizes how you read, sign, and process contracts with AI-driven agents and blockchain-powered automation
@@ -68,7 +67,7 @@ const App: React.FC = () => {
         <Step {...data.step2} />
         <Step {...data.step3} />
 
-        <BottomLead {...data.bottomLead} />
+        <BottomLead />
       </div>
     </div>
   );

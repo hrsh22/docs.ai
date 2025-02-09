@@ -7,6 +7,7 @@ import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 import { pageNavigationPlugin } from "@react-pdf-viewer/page-navigation";
 import { searchPlugin } from "@react-pdf-viewer/search";
 import { useAccount } from "wagmi";
+import Image from "next/image";
 
 export default function Dummy() {
     const [initialPage, setInitialPage] = useState(0);
@@ -159,27 +160,35 @@ export default function Dummy() {
                 <div className="fixed">
                     <div className="flex flex-col gap-6 items-center justify-center p-5">
                         <div className="flex flex-col justify-center items-center bg-gray-800 text-white rounded-lg shadow-lg p-6 w-80">
-                            <h2 className="text-2xl font-bold mb-4 text-center">A I &nbsp;&nbsp;&nbsp;A G E N T S</h2>
-                            <p className="mb-4 text-center">
-                                TAKE AGENT HELP
-                            </p>
-                            <div className="flex space-x-4">
-                                <button
-                                    onClick={getSummary}
-                                    disabled={isLoading}
-                                    className="text-blue-500 hover:text-blue-400 transition duration-200 disabled:opacity-50"
-                                >
-                                    {isLoading ? "Summarizing..." : "Summarize"}
-                                </button>
-                                <button 
-                                onClick={getBill}
-                                disabled={isLoading}
-                                className="text-blue-400 hover:text-blue-300 transition duration-200">
-                                    {isLoading ? "Generating..." : "Bill Agent"}
-                                </button>
-                                <button className="text-blue-400 hover:text-blue-300 transition duration-200">
-                                    A3
-                                </button>
+                            <h2 className="text-2xl mb-4 text-center">A I &nbsp;&nbsp;&nbsp;A G E N T S</h2>
+
+                            <div className="flex flex-row gap-8">
+                                {isLoading ? <>
+
+                                    <div className="flex-col gap-4 w-full flex items-center justify-center">
+                                        <div
+                                            className="w-20 h-20 border-4 border-transparent text-blue-400 text-4xl animate-spin flex items-center justify-center border-t-blue-400 rounded-full"
+                                        >
+                                            <div
+                                                className="w-16 h-16 border-4 border-transparent text-red-400 text-2xl animate-spin flex items-center justify-center border-t-red-400 rounded-full"
+                                            ></div>
+                                        </div>
+                                    </div>
+                                </> : <>
+                                    <button
+                                        onClick={getSummary}
+                                        className="cursor-pointer relative after:content-['Summarize'] after:text-white after:absolute after:text-nowrap after:scale-0 hover:after:scale-100 after:duration-200 w-16 h-16 rounded-full border border-4 border-sky-200 bg-black pointer flex items-center justify-center duration-300 hover:rounded-[50px] hover:w-36 group/button overflow-hidden active:scale-90"
+                                    >
+                                        <Image className="fill-white delay-50 duration-200 group-hover/button:-translate-y-12" src="/shine.png" alt="" width={40} height={20} />
+                                    </button>
+                                    <button
+                                        onClick={getBill}
+                                        className="cursor-pointer relative after:content-['Invoice'] after:text-white after:absolute after:text-nowrap after:scale-0 hover:after:scale-100 after:duration-200 w-16 h-16 rounded-full border border-4 border-sky-200 bg-black pointer flex items-center justify-center duration-300 hover:rounded-[50px] hover:w-36 group/button overflow-hidden active:scale-90"
+                                    >
+                                        <Image className="fill-white delay-50 duration-200 group-hover/button:-translate-y-12" src="/money.png" alt="" width={40} height={20} />
+                                    </button>
+                                </>}
+
                             </div>
                         </div>
 

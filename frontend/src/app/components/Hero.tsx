@@ -10,7 +10,7 @@ interface HeroProps {
     mainActionText: string;
 }
 
-const Hero: React.FC<HeroProps> = ({ appType, tagLine, description, mainActionText, extraActionText }) => {
+const Hero: React.FC<HeroProps> = ({ appType, tagLine, description, mainActionText }) => {
 
     const router = useRouter();
 
