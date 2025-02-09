@@ -5,7 +5,6 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const apiKey = process.env.OPENAI_API_KEY;
-console.log('OPENAI_API_KEY present:', !!apiKey); // Will log true/false without exposing the key
 if (!apiKey) {
     throw new Error('OPENAI_API_KEY is not set in environment variables');
 }
