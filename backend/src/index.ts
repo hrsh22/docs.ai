@@ -4,6 +4,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import someRoute from './routes/someRoute';
 import basenameRoute from './routes/getBasename';
+import chatRoute from './routes/chatRoute';
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -26,6 +27,8 @@ app.use(cors({
 // Route handling
 app.use('/api', someRoute);
 app.use('/api', basenameRoute);
+app.use('/api', chatRoute);
+
 // Start the server
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
