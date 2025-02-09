@@ -6,9 +6,9 @@ import "@react-pdf-viewer/core/lib/styles/index.css";
 import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 import { pageNavigationPlugin } from "@react-pdf-viewer/page-navigation";
 import { searchPlugin } from "@react-pdf-viewer/search";
-import { useAccount } from "wagmi";
+import { useAccount, useSendTransaction } from "wagmi";
 import Image from "next/image";
-import { ethers, BrowserProvider, parseEther } from "ethers";
+import { parseEther } from "ethers";
 
 export default function Dummy() {
     const [initialPage, setInitialPage] = useState(0);
@@ -156,8 +156,10 @@ export default function Dummy() {
                 console.log(finalJson);
 
                 setSummary(finalJson.displayMessage || 'No summary returned');
-                setAccountAdd(finalJson.accountAddress)
-                setAmt(finalJson.finalAmount)
+                // Clean up the address by removing any spaces
+                const cleanAddress = finalJson.accountAddress.replace(/\s+/g, '');
+                setAccountAdd(cleanAddress);
+                setAmt(finalJson.finalAmount);
             }
         } catch (error) {
             console.error('Error in getSummary:', error);
@@ -167,37 +169,31 @@ export default function Dummy() {
         }
     };
 
+    const { sendTransactionAsync } = useSendTransaction();
+
     const payInvoice = async () => {
         try {
-            // Check if MetaMask (or another Ethereum provider) is installed
-            if (!window.ethereum) {
-                throw new Error('Please install MetaMask or another Ethereum wallet.');
+            setLoading(true);
+            if (!isConnected) {
+                throw new Error('Please connect your wallet first');
             }
 
-            // Initialize the provider (MetaMask, WalletConnect, etc.)
-            const provider = new BrowserProvider(window.ethereum);
+            if (!accAdd || !/^0x[a-fA-F0-9]{40}$/.test(accAdd)) {
+                throw new Error('Invalid Ethereum address');
+            }
 
-            // Request account access
-            await provider.send('eth_requestAccounts', []);
+            // Ensure amount is a valid string and handle potential formatting
+            const formattedAmount = amt.toString().trim();
+            if (!formattedAmount) {
+                throw new Error('Invalid amount');
+            }
 
-            // Get the signer (connected wallet)
-            const signer = await provider.getSigner();
+            const txResponse = await sendTransactionAsync({
+                to: accAdd as `0x${string}`,
+                value: parseEther(formattedAmount),
+            });
 
-            // Define the transaction details
-            const transaction = {
-                to: accAdd,
-                value: parseEther(amt), // 0.01 ETH
-            };
-
-            // Send the transaction
-            const txResponse = await signer.sendTransaction(transaction);
-
-            // Wait for the transaction to be mined
-            await txResponse.wait();
-
-            // // Set the transaction hash
-            // setTransactionHash(txResponse.hash);
-
+            alert('Transaction submitted! Transaction hash: ' + txResponse);
             alert('Transaction successful!');
         } catch (error) {
             console.error('Transaction failed:', error);
