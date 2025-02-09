@@ -20,7 +20,7 @@ function validateEnvironment(): void {
     }
 }
 
-async function initializeAgent() {
+export async function initializeAgent() {
     validateEnvironment();
 
     const llm = new ChatOpenAI({
